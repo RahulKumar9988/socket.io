@@ -40,6 +40,7 @@ function App() {
       <h1> Welcime to socket.IO</h1>
       <div>
         {socketId}
+        <p>rola</p>
       </div>
       <form onSubmit={handleSubmit}>
         <div className='flex'>
