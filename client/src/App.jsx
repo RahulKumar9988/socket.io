@@ -12,12 +12,16 @@ function App() {
   const [roomName, setRoomName] = useState("");
 
 
+
   const handleSubmit = (e)=>{
     e.preventDefault();
     socket.emit('message', {message, room});
     setMessage("");
   }
 
+  const joinRoomHandler = (e)=>{
+    socket.emit('join-room', roomName);
+  }
   useEffect(()=>{
 
     socket.on("connect", ()=>{
@@ -41,21 +45,28 @@ function App() {
       <div>
         {socketId}
       </div>
-      <form onSubmit={handleSubmit}>
-        <div className='flex'>
-          <input type="text" value={message} onChange={(e)=>{
+      <form onSubmit={joinRoomHandler}>
+        <div>
+          <input type="text" value={roomName} placeholder='room name' onChange={(e)=>{
+            setRoomName(e.target.value);
+          }} />
+          <Button type='submit'>join room</Button>
+        </div>
+
+      </form>
+
+      <form className='flex flex-row' onSubmit={handleSubmit} >
+        <div>
+          <input type="text" placeholder='message' value={message} onChange={(e)=>{
             setMessage(e.target.value);
           }} />
-          <Button type='submit'>submit</Button>
+          <Button type='submit'>send</Button>
         </div>
         <div>
-          <input type="text" value={room} onChange={(e)=>{
+          <input type="text" placeholder='individual id' value={room} onChange={(e)=>{
             setRoom(e.target.value);
           }} />
-        
         </div>
-        
-        
       </form>
       <div>
           {
