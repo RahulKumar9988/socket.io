@@ -24,6 +24,8 @@ io.on("connection",(socket) => {
     socket.on("message",({room, message})=>{
         console.log({room, message});
         io.to(room).emit("recevie-message", message);
+        console.log("m");
+        
     })
 
     socket.on("disconnect", () => {
