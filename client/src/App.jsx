@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { io } from "socket.io-client"
-import { Button, Container, TextField } from '@mui/material'
+import { Button, Container, Popover } from '@mui/material'
+import Message from './components/Message';
+import "./main.css";
 
 function App() {
   const socket = useMemo(()=>io('http://localhost:3000/'), []);
@@ -10,6 +12,7 @@ function App() {
   const [socketId, setSocketId] = useState("");
   const [chat, setChat] = useState([]);
   const [roomName, setRoomName] = useState("");
+  const [roomAlter, setRoomAlert] = useState(false);
 
 
 
@@ -20,10 +23,12 @@ function App() {
   }
 
   const joinRoomHandler = (e)=>{
+    e.preventDefault();
     socket.emit('join-room', roomName);
+    setRoomName("");
+    
   }
   useEffect(()=>{
-
     socket.on("connect", ()=>{
       setSocketId(socket.id);
       console.log('connected', socket.id);
@@ -39,9 +44,12 @@ function App() {
       socket.disconnect();
     }
   },[])
+
+ 
   return (
     <Container>
       <h1> Welcime to socket.IO</h1>
+      
       <div>
         {socketId}
       </div>
@@ -55,7 +63,7 @@ function App() {
 
       </form>
 
-      <form className='flex flex-row' onSubmit={handleSubmit} >
+      <form onSubmit={handleSubmit} >
         <div>
           <input type="text" placeholder='message' value={message} onChange={(e)=>{
             setMessage(e.target.value);
@@ -74,7 +82,10 @@ function App() {
               <p key={i}>{m}</p>
             ))
           }
-        </div>
+      </div>
+      {
+        roomAlter && <Message/>
+      }
     </Container>
   )
 }

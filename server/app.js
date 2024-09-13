@@ -32,6 +32,9 @@ io.on("connection",(socket) => {
         console.log(`user disconnected ${socket.id}`);
     })
    
+    socket.on("join-room",(room) =>{
+        socket.join(room);
+    })
    
 
 })
